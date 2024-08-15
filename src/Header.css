@@ -1,0 +1,14 @@
+/* Header.css */
+.navbar .form-inline {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar .form-inline .form-control {
+    flex: 1;
+  }
+  
+  .navbar .form-inline .btn {
+    margin-left: 5px;
+  }
+  

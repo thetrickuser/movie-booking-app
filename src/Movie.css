@@ -1,0 +1,19 @@
+/* Movie.css */
+.hero-container {
+    margin-top: 20px;
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .card-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .carousel-item {
+    display: flex;
+    justify-content: center;
+  }

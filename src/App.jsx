@@ -1,5 +1,8 @@
+import Header from "./Header"
+import Hero from "./Hero"
+
 function App() {
-  return <h1>Hi there</h1>
+  return (<><Header/><Hero/></>)
 }
 
 export default App
