@@ -3,10 +3,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Movie from "./Movie.jsx";
-import Home from "./Home.jsx";
-import Login from "./Login.jsx";
-import Register from "./Register.jsx";
+import Movie from "./pages/Movie.jsx";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 
