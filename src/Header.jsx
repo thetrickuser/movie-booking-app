@@ -1,9 +1,22 @@
-import React from 'react';
-import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container, Row, Col } from 'react-bootstrap';
-import { FaSearch, FaUserCircle } from 'react-icons/fa';
-import './Header.css'; // Import the CSS file for custom styles
+import React from "react";
+import {
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Button,
+  Dropdown,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+import { FaSearch, FaUserCircle } from "react-icons/fa";
+import "./Header.css"; // Import the CSS file for custom styles
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Header = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
@@ -27,22 +40,32 @@ const Header = () => {
               </Nav>
             </Col>
             <Col md={6}>
-              <Form inline className="w-100 d-flex">
-                <FormControl type="text" placeholder="Search" className="mr-sm-2 flex-grow-1" />
-                <Button variant="outline-success"><FaSearch /></Button>
+              <Form className="w-100 d-flex">
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="mr-sm-2 flex-grow-1"
+                />
+                <Button variant="outline-success">
+                  <FaSearch />
+                </Button>
               </Form>
             </Col>
             <Col md={3} className="text-right">
-              <Dropdown alignRight>
-                <Dropdown.Toggle variant="secondary" id="dropdown-profile">
-                  <FaUserCircle size={30} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
-                  <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
-                  <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              {isAuthenticated ? (
+                <Dropdown>
+                  <Dropdown.Toggle variant="secondary" id="dropdown-profile">
+                    <FaUserCircle size={30} />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
+                    <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
+                    <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : (
+                <Link to={"/login"}>Login</Link>
+              )}
             </Col>
           </Row>
         </Navbar.Collapse>

@@ -1,11 +1,12 @@
 import React from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Movie = () => {
+  const {id} = useParams();
   const movie = {
-    id: 1,
-    title: "Movie 1",
+    id,
+    title: `Movie ${id}`,
     image: "/movie posters/batman begins.jpg",
     runtime: "192",
     genres: ["Comedy", "Drama"],
