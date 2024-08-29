@@ -1,8 +1,10 @@
 import React from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
+    const {userDetails} = useSelector(state => state.auth);
     return (
         <Card style={{ maxWidth: '400px', margin: 'auto', padding: '20px' }}>
             <Card.Body>

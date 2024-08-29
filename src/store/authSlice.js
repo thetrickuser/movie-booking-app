@@ -7,7 +7,8 @@ const initialState = {
     userDetails: {},
     loading: false,
     error: null,
-    registrationSuccess: false
+    registrationSuccess: false,
+    userType: "CUSTOMER"
 }
 
 export const authSlice = createSlice({
@@ -17,6 +18,9 @@ export const authSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false;
             state.userDetails = {};
+        },
+        vendorLogin: (state) => {
+            state.userType = "VENDOR"
         }
     },
     extraReducers: (builder) => {
@@ -53,5 +57,5 @@ export const authSlice = createSlice({
     }
 })
 
-export const { logout } = authSlice.actions;
+export const { logout, vendorLogin } = authSlice.actions;
 export default authSlice.reducer;

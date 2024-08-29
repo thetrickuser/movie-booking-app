@@ -6,6 +6,7 @@ const registerUrl = import.meta.env.VITE_BACKEND_URL + "/users/register";
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
     async (userData, { rejectWithValue }) => {
+        console.log(userData)
         try {
             const response = await axios.post(registerUrl, userData);
             return response.data;

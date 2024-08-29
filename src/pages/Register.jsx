@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Form, Button, Card, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
 import { registerUser } from "../logic/registerThunk";
 
@@ -16,6 +16,7 @@ const registerSchema = object({
 
 const Register = () => {
   const dispatch = useDispatch();
+  const { userType } = useSelector((state) => state.auth);
   const { registrationSuccess, error } = useSelector((state) => state.auth);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -35,7 +36,7 @@ const Register = () => {
 
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
-    navigate("/login");
+    navigate("/");
   };
 
   const handleCloseErrorModal = () => {
@@ -55,8 +56,8 @@ const Register = () => {
           }}
           validationSchema={registerSchema}
           onSubmit={(values) => {
-            console.log(values);
-            dispatch(registerUser(values));
+            console.log({ ...values, userType });
+            dispatch(registerUser({ ...values, userType }));
           }}
         >
           {({ values, errors, handleChange, handleSubmit }) => (

@@ -12,11 +12,17 @@ import {
 } from "react-bootstrap";
 import { FaSearch, FaUserCircle } from "react-icons/fa";
 import "./Header.css"; // Import the CSS file for custom styles
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { vendorLogin } from "../store/authSlice";
 
 const Header = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleVendorLogin = () => {
+    dispatch(vendorLogin());
+  }
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
@@ -51,7 +57,7 @@ const Header = () => {
                 </Button>
               </Form>
             </Col>
-            <Col md={3} className="text-right">
+            <Col md={2} className="text-right">
               {isAuthenticated ? (
                 <Dropdown>
                   <Dropdown.Toggle variant="secondary" id="dropdown-profile">
@@ -66,6 +72,9 @@ const Header = () => {
               ) : (
                 <Link to={"/login"}>Login</Link>
               )}
+            </Col>
+            <Col md={1} className="text-right">
+            <Link to={"/login"} onClick={handleVendorLogin}>List Your Show</Link>
             </Col>
           </Row>
         </Navbar.Collapse>
