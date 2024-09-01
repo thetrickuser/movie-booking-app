@@ -1,26 +1,42 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getMovieById } from "../logic/movieThunk";
+
+const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 
 const Movie = () => {
   const {id} = useParams();
-  const movie = {
-    id,
-    title: `Movie ${id}`,
-    image: "/movie posters/batman begins.jpg",
-    runtime: "192",
-    genres: ["Comedy", "Drama"],
-    releaseDate: "2024-08-15",
-  };
+  const dispatch = useDispatch()
+  const [movie, setMovie] = useState(null);
+
+  console.log(movie)
+
+  useEffect(() => {
+    console.log("calling get movie")
+    dispatch(getMovieById(id))
+    .unwrap()
+      .then(response => setMovie(response))
+      .catch(error => console.error('Error fetching movie:', error));
+
+  }, [dispatch, id]);
+
+  console.log(movie)
+
+  if (!movie) {
+    return <p>Loading Movie..</p>
+  }
 
   return (
     <Container className="hero-container">
       <Row>
         <Col md={4} lg={3} className="mb-4">
           <Card>
-            <Card.Img variant="top" src={movie.image} alt={movie.title} />
+            <Card.Img src={`${basicImagePath}${movie.poster_path}`} alt={movie.title} />
             <Card.Body>
               <Card.Title>{movie.title}</Card.Title>
+              <Card.Subtitle>{movie.tagline}</Card.Subtitle>
             </Card.Body>
           </Card>
         </Col>
@@ -28,9 +44,10 @@ const Movie = () => {
           <Card>
             <Card.Body>
               <h1>{movie.title}</h1>
+              <Card.Text>{movie.overview}</Card.Text>
               <p>
-                <span>{movie.runtime}</span> | <span>{movie.genres}</span> | {" "}
-                <span>{movie.releaseDate}</span>
+                <span>{movie.runtime}</span> | <>{movie.genres.map(genre => <span key={genre.id}>{genre.name} </span>)}</> | {" "}
+                <span>{movie.release_date}</span>
               </p>
             </Card.Body>
             <Button variant="info" size="lg">Book Ticket</Button>
