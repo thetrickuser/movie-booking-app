@@ -9,20 +9,27 @@ const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 const Movie = () => {
   const {id} = useParams();
   const dispatch = useDispatch()
+  const [duration, setDuration] = useState({})
   const [movie, setMovie] = useState(null);
 
   console.log(movie)
 
   useEffect(() => {
-    console.log("calling get movie")
     dispatch(getMovieById(id))
     .unwrap()
-      .then(response => setMovie(response))
+      .then(response => {
+        setMovie(response);
+        const h = Math.floor(response.runtime / 60);
+        const m = response.runtime % 60;
+        setDuration({h,m});
+      })
       .catch(error => console.error('Error fetching movie:', error));
 
   }, [dispatch, id]);
 
-  console.log(movie)
+  const handleBookTicket = () => {
+    console.log("booking ticket")
+  }
 
   if (!movie) {
     return <p>Loading Movie..</p>
@@ -46,11 +53,11 @@ const Movie = () => {
               <h1>{movie.title}</h1>
               <Card.Text>{movie.overview}</Card.Text>
               <p>
-                <span>{movie.runtime}</span> | <>{movie.genres.map(genre => <span key={genre.id}>{genre.name} </span>)}</> | {" "}
+                <span>{duration.h} hour {duration.m} mins</span> | <>{movie.genres.map(genre => <span key={genre.id}>{genre.name} </span>)}</> | {" "}
                 <span>{movie.release_date}</span>
               </p>
             </Card.Body>
-            <Button variant="info" size="lg">Book Ticket</Button>
+            <Button variant="info" size="lg" onClick={handleBookTicket}>Book Ticket</Button>
           </Card>
         </Col>
       </Row>
