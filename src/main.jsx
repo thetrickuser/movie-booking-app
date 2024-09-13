@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -9,6 +8,8 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
+import VendorHome from "./pages/VendorHome.jsx";
+import Booking from "./pages/Booking.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
+  {
+    path: "/vendor-home",
+    element: <VendorHome/>
+  },
+  {
+    path: "/booking",
+    element: <Booking/>
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getMovieById } from "../logic/movieThunk";
 
 const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
@@ -9,6 +9,7 @@ const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 const Movie = () => {
   const {id} = useParams();
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [duration, setDuration] = useState({})
   const [movie, setMovie] = useState(null);
 
@@ -28,7 +29,7 @@ const Movie = () => {
   }, [dispatch, id]);
 
   const handleBookTicket = () => {
-    console.log("booking ticket")
+    navigate("/booking")
   }
 
   if (!movie) {

@@ -15,8 +15,7 @@ const registerSchema = object({
 
 const Register = () => {
   const dispatch = useDispatch();
-  const { userType } = useSelector((state) => state.auth);
-  const { registrationSuccess, error } = useSelector((state) => state.auth);
+  const { userType, registrationSuccess, error } = useSelector((state) => state.auth);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();

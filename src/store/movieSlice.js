@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getAllMovies } from "../logic/movieThunk";
 
 const initialState = {
-  moviesData: [],
+  moviesData: JSON.parse(localStorage.getItem('moviesData')),
   loading: false,
   error: null,
 };
@@ -18,6 +18,7 @@ export const movieSlice = createSlice({
       .addCase(getAllMovies.fulfilled, (state, action) => {
         state.loading = false;
         state.moviesData = action.payload;
+        localStorage.setItem("moviesData", JSON.stringify(state.moviesData))
       })
       .addCase(getAllMovies.rejected, (state, action) => {
         state.loading = false;

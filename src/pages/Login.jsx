@@ -1,18 +1,17 @@
-import React from "react";
 import { Form, Button, Card } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { loginUser } from "../logic/loginThunk";
+import { object, string } from "yup";
 
-// const loginSchema = object({
-//   email: string().required(),
-//   password: string().min(6, "Password must be atleast 6 letters").required(),
-// });
+const loginSchema = object({
+  email: string().required(),
+  password: string().min(6, "Password must be atleast 6 letters").required(),
+});
 
 const Login = () => {
   const dispatch = useDispatch();
-//   const { userDetails, userType } = useSelector((state) => state.auth);
   return (
     <Card style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <Card.Body>
@@ -24,11 +23,11 @@ const Login = () => {
           }}
           validationSchema={loginSchema}
           onSubmit={(values) => {
-            console.log({ ...values, userType });
-            dispatch(loginUser({ ...values, userType }));
+            console.log({ ...values });
+            dispatch(loginUser({ ...values }));
           }}
         >
-          {({ values, errors, handleChange, handleSubmit }) => (
+          {({ values, handleChange, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="email">
                 <Form.Label>Email ID</Form.Label>
