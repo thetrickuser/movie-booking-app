@@ -54,7 +54,6 @@ const Register = () => {
           }}
           validationSchema={registerSchema}
           onSubmit={(values) => {
-            console.log({ ...values, userType });
             dispatch(registerUser({ ...values, userType }));
           }}
         >

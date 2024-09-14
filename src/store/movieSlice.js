@@ -3,6 +3,9 @@ import { getAllMovies } from "../logic/movieThunk";
 
 const initialState = {
   moviesData: JSON.parse(localStorage.getItem('moviesData')),
+  currentMovie: {},
+  selectedSeats: [],
+  bookingAmount: 0,
   loading: false,
   error: null,
 };
@@ -10,6 +13,15 @@ const initialState = {
 export const movieSlice = createSlice({
   name: "movie",
   initialState,
+  reducers: {
+    setCurrentMovie: (state, action) => {
+      state.currentMovie = action.payload;
+    },
+    addBookingDetails: (state, action) => {
+      state.selectedSeats = action.payload.selectedSeats;
+      state.bookingAmount = action.payload.bookingAmount;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllMovies.pending, (state) => {
@@ -26,5 +38,7 @@ export const movieSlice = createSlice({
       });
   },
 });
+
+export const { setCurrentMovie, addBookingDetails } = movieSlice.actions;
 
 export default movieSlice.reducer;

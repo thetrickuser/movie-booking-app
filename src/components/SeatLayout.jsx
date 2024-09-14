@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./SeatLayout.css"; // Import the CSS file
+import "./SeatLayout.css";
+import { useDispatch } from "react-redux";
+import { addBookingDetails } from "../store/movieSlice";
+import { useNavigate } from "react-router-dom";
 
 const generateSeats = () => {
   const rows = "ABCDEFGHIJK";
@@ -25,10 +28,12 @@ const generateSeats = () => {
   return seats;
 };
 
-const SeatLayout = () => {
+const SeatLayout = ({movie}) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookingAmount, setBookingAmount] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const seats = generateSeats();
 
@@ -47,9 +52,9 @@ const SeatLayout = () => {
   };
 
   const handleProceed = () => {
-    // Add your logic here to proceed with the booking
-    console.log("Proceed to book clicked");
     setShowModal(false);
+    dispatch(addBookingDetails({selectedSeats, bookingAmount}));
+    navigate("/order-summary")
   };
 
   const renderRow = (row, rowIndex) => (
@@ -77,6 +82,7 @@ const SeatLayout = () => {
 
   return (
     <React.Fragment>
+      <h2>{movie.title}</h2>
       <Container>
         <h2>Total Amount: {bookingAmount}</h2>
         <h2 className="text-center my-4">Select Your Seats</h2>

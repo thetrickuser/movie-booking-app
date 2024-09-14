@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux"
 import SeatLayout from "../components/SeatLayout"
 
 const Booking = () => {
+  const movie = useSelector(state => state.movie.currentMovie)
   return (
-    <div><SeatLayout/></div>
+    <div><SeatLayout movie={movie}/></div>
   )
 }
 

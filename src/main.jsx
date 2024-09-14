@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import VendorHome from "./pages/VendorHome.jsx";
 import Booking from "./pages/Booking.jsx";
+import OrderSummary from "./pages/OrderSummary.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/booking",
     element: <Booking/>
+  },
+  {
+    path: "/order-summary",
+    element: <OrderSummary/>
   }
 ]);
 

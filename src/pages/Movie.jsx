@@ -3,6 +3,7 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMovieById } from "../logic/movieThunk";
+import { setCurrentMovie } from "../store/movieSlice";
 
 const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 
@@ -12,8 +13,6 @@ const Movie = () => {
   const navigate = useNavigate()
   const [duration, setDuration] = useState({})
   const [movie, setMovie] = useState(null);
-
-  console.log(movie)
 
   useEffect(() => {
     dispatch(getMovieById(id))
@@ -25,8 +24,11 @@ const Movie = () => {
         setDuration({h,m});
       })
       .catch(error => console.error('Error fetching movie:', error));
-
   }, [dispatch, id]);
+
+  useEffect(() => {
+    dispatch(setCurrentMovie(movie))
+  },[dispatch, movie])
 
   const handleBookTicket = () => {
     navigate("/booking")
