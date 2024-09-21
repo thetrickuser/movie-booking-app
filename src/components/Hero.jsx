@@ -2,17 +2,12 @@ import { useEffect } from "react";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./Hero.css";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllMovies } from "../logic/movieThunk";
+import { useGetAllMoviesQuery } from "../store/movie";
 
 const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 
 const Hero = () => {
-  const { moviesData, loading, error } = useSelector(state => state.movie)
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(getAllMovies())
-  },[dispatch])
+  const { data: moviesData, error, loading } = useGetAllMoviesQuery();
   return (
     <Container className="hero-container">
       <Row>

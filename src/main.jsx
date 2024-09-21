@@ -7,7 +7,7 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { Provider } from "react-redux";
-import { store } from "./store/store.js";
+import store from "./store/store.js";
 import VendorHome from "./pages/VendorHome.jsx";
 import Booking from "./pages/Booking.jsx";
 import OrderSummary from "./pages/OrderSummary.jsx";

@@ -1,34 +1,16 @@
 import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMovieById } from "../logic/movieThunk";
-import { setCurrentMovie } from "../store/movieSlice";
+import { useGetMovieByIdQuery } from "../store/movie";
 
 const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 
 const Movie = () => {
   const {id} = useParams();
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [duration, setDuration] = useState({})
-  const [movie, setMovie] = useState(null);
 
-  useEffect(() => {
-    dispatch(getMovieById(id))
-    .unwrap()
-      .then(response => {
-        setMovie(response);
-        const h = Math.floor(response.runtime / 60);
-        const m = response.runtime % 60;
-        setDuration({h,m});
-      })
-      .catch(error => console.error('Error fetching movie:', error));
-  }, [dispatch, id]);
-
-  useEffect(() => {
-    dispatch(setCurrentMovie(movie))
-  },[dispatch, movie])
+  const { data: movie, error, isLoading } = useGetMovieByIdQuery(id);
 
   const handleBookTicket = () => {
     navigate("/booking")

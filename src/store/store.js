@@ -1,10 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./authSlice";
-import movieReducer from "./movieSlice"
+import { configureStore } from '@reduxjs/toolkit';
+import {authApi} from './auth';
+import {movieApi} from './movie';
 
-export const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        movie: movieReducer
-    }
-})
+const store = configureStore({
+  reducer: {
+    [authApi.reducerPath]: authApi.reducer,
+    [movieApi.reducerPath]: movieApi.reducer,
+  },
+  middleware: (mid) =>
+    mid().concat(authApi.middleware).concat(movieApi.middleware),
+});
+
+export default store;

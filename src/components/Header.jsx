@@ -12,16 +12,21 @@ import {
 } from "react-bootstrap";
 import { FaSearch, FaUserCircle } from "react-icons/fa";
 import "./Header.css"; // Import the CSS file for custom styles
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { vendorLogin } from "../store/authSlice";
+import { auth } from "../../firebaseConfig";
+import { useLogoutUserMutation } from "../store/auth";
 
 const Header = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const [logoutUser] = useLogoutUserMutation();
+
+  const user = auth.currentUser;
+
+  const handleLogout = async () => {
+    await logoutUser();
+  }
 
   const handleVendorLogin = () => {
-    dispatch(vendorLogin());
+    console.log("Vendor login clicked");
   }
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -58,7 +63,7 @@ const Header = () => {
               </Form>
             </Col>
             <Col md={2} className="text-right">
-              {isAuthenticated ? (
+              {user ? (
                 <Dropdown>
                   <Dropdown.Toggle variant="secondary" id="dropdown-profile">
                     <FaUserCircle size={30} />
@@ -66,7 +71,7 @@ const Header = () => {
                   <Dropdown.Menu>
                     <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
                     <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
-                    <Dropdown.Item href="#/logout">Logout</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               ) : (

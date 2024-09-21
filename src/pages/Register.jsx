@@ -1,10 +1,9 @@
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import { Form, Button, Card, Modal } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
-import { registerUser } from "../logic/registerThunk";
+import { useRegisterUserMutation } from "../store/auth";
 
 const registerSchema = object({
   name: string().required(),
@@ -14,23 +13,17 @@ const registerSchema = object({
 });
 
 const Register = () => {
-  const dispatch = useDispatch();
-  const { userType, registrationSuccess, error } = useSelector((state) => state.auth);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const navigate = useNavigate();
+  const [registerUser, {isLoading, error}] = useRegisterUserMutation();
 
   useEffect(() => {
     if (registrationSuccess) {
       setShowSuccessModal(true);
     }
   }, [registrationSuccess]);
-
-  useEffect(() => {
-    if (error) {
-      setShowErrorModal(true);
-    }
-  }, [error]);
 
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
@@ -39,6 +32,21 @@ const Register = () => {
 
   const handleCloseErrorModal = () => {
     setShowErrorModal(false);
+  };
+
+  const handleRegister = async (email, password) => {
+    console.log("handle register called")
+    console.log(email, password);
+    const {error, data: user, loading} = await registerUser({email, password});
+    console.log(user)
+    if (user) {
+      setRegistrationSuccess(true);
+      
+    }
+
+    if (error) {
+      setShowErrorModal(true);
+    }
   };
 
   return (
@@ -54,7 +62,7 @@ const Register = () => {
           }}
           validationSchema={registerSchema}
           onSubmit={(values) => {
-            dispatch(registerUser({ ...values, userType }));
+            handleRegister(values.email, values.password);
           }}
         >
           {({ values, errors, handleChange, handleSubmit }) => (
@@ -134,7 +142,7 @@ const Register = () => {
       </Modal>
 
       {/* Error Modal */}
-      <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+      {/* <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
         <Modal.Header closeButton>
           <Modal.Title>Registration Error</Modal.Title>
         </Modal.Header>
@@ -144,9 +152,10 @@ const Register = () => {
             Close
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </Card>
   );
 };
+
 
 export default Register;

@@ -1,9 +1,8 @@
 import { Form, Button, Card } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import { loginUser } from "../logic/loginThunk";
 import { object, string } from "yup";
+import { useLoginUserMutation } from "../store/auth";
 
 const loginSchema = object({
   email: string().required(),
@@ -11,7 +10,14 @@ const loginSchema = object({
 });
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const navigate = useNavigate();
+  const handleLogin = async (email, password) => {
+    const user = await loginUser({email, password});
+    console.log(user);
+    navigate("/");
+  }
+
   return (
     <Card style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <Card.Body>
@@ -23,7 +29,7 @@ const Login = () => {
           }}
           validationSchema={loginSchema}
           onSubmit={(values) => {
-            dispatch(loginUser({ ...values }));
+            handleLogin(values.email, values.password);
           }}
         >
           {({ values, handleChange, handleSubmit }) => (

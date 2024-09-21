@@ -3,7 +3,6 @@ import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SeatLayout.css";
 import { useDispatch } from "react-redux";
-import { addBookingDetails } from "../store/movieSlice";
 import { useNavigate } from "react-router-dom";
 
 const generateSeats = () => {
@@ -32,7 +31,6 @@ const SeatLayout = ({movie}) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookingAmount, setBookingAmount] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const seats = generateSeats();
@@ -53,7 +51,6 @@ const SeatLayout = ({movie}) => {
 
   const handleProceed = () => {
     setShowModal(false);
-    dispatch(addBookingDetails({selectedSeats, bookingAmount}));
     navigate("/order-summary")
   };
 
