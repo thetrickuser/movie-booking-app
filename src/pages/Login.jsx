@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { object, string } from "yup";
 import { useLoginUserMutation } from "../store/auth";
+import React from "react";
 
 const loginSchema = object({
   email: string().required(),
@@ -19,6 +20,7 @@ const Login = () => {
   }
 
   return (
+    <React.Fragment>
     <Card style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <Card.Body>
         <Card.Title>Login</Card.Title>
@@ -73,6 +75,8 @@ const Login = () => {
         </p>
       </Card.Body>
     </Card>
+    {isLoading && <p>Loading...</p>}
+    </React.Fragment>
   );
 };
 

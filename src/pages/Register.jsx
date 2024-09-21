@@ -34,10 +34,9 @@ const Register = () => {
     setShowErrorModal(false);
   };
 
-  const handleRegister = async (email, password) => {
+  const handleRegister = async (userData) => {
     console.log("handle register called")
-    console.log(email, password);
-    const {error, data: user, loading} = await registerUser({email, password});
+    const {error, data: user, loading} = await registerUser(userData);
     console.log(user)
     if (user) {
       setRegistrationSuccess(true);
@@ -62,7 +61,7 @@ const Register = () => {
           }}
           validationSchema={registerSchema}
           onSubmit={(values) => {
-            handleRegister(values.email, values.password);
+            handleRegister(values);
           }}
         >
           {({ values, errors, handleChange, handleSubmit }) => (
