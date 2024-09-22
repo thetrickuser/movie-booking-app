@@ -1,13 +1,8 @@
 import { createApi, fakeBaseQuery, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { auth, db } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { createSlice } from '@reduxjs/toolkit';
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
-
-const initialState = {
-    authenticated: false,
-    user: null,
-}
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { setUserDetails, resetUserDetails } from '../store/userDetailsSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -19,16 +14,17 @@ export const authApi = createApi({
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           if (userCredential.user.uid) {
-            const docRef = await setDoc(doc(db, 'users', userCredential.user.uid), {
+            await setDoc(doc(db, 'users', userCredential.user.uid), {
               name,
               email,
               phoneNumber
             })
-            console.log(docRef);
+            return { data: {code: 201, status: 'SUCCESS', message: 'User created successfully'} };
           }
-          return { data: userCredential.user };
-        } catch (error) {
-          return { error: { status: 'CUSTOM_ERROR', error: error.message } };
+        } catch (err) {
+          if (err.code === 'auth/email-already-in-use') {
+            return { error: { code: 400, message: 'Email already exists', status: 'BAD_REQUEST' } };
+          }
         }
       },
     }),
@@ -36,9 +32,10 @@ export const authApi = createApi({
       async queryFn({ email, password }) {
         try {
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          const user = await getDoc(doc(db, 'users', userCredential.user.uid));
-          console.log(user.data());
-          return { data: user.data() };
+          if (userCredential?.user?.uid) {
+            const userRef = await getDoc(doc(db, 'users', userCredential.user.uid));
+            return { data: {code: 200, status: 'SUCCESS', message: 'Login successful', userData: userRef.data() }};
+          }
         } catch (error) {
           return { error: { status: 'CUSTOM_ERROR', error: error.message } };
         }

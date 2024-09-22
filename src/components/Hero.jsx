@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./Hero.css";
-import { useGetAllMoviesQuery } from "../store/movie";
+import { useGetAllMoviesQuery } from "../api/movieApi";
 
 const basicImagePath = import.meta.env.VITE_MOVIES_POSTER_IMAGE_BASIC_PATH
 

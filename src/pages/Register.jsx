@@ -1,9 +1,11 @@
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
-import { Form, Button, Card, Modal } from "react-bootstrap";
+import { Form, Button, Card, Modal, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
-import { useRegisterUserMutation } from "../store/auth";
+import { useRegisterUserMutation } from "../api/authApi";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../store/userDetailsSlice";
 
 const registerSchema = object({
   name: string().required(),
@@ -17,13 +19,20 @@ const Register = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const navigate = useNavigate();
-  const [registerUser, {isLoading, error}] = useRegisterUserMutation();
+  const dispatch = useDispatch();
+  const [registerUser, { isLoading, error, isError, isSuccess }] = useRegisterUserMutation();
 
   useEffect(() => {
-    if (registrationSuccess) {
+    if (isSuccess) {
       setShowSuccessModal(true);
     }
-  }, [registrationSuccess]);
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      setShowErrorModal(true);
+    }
+  }, [isError]);
 
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
@@ -36,14 +45,14 @@ const Register = () => {
 
   const handleRegister = async (userData) => {
     console.log("handle register called")
-    const {error, data: user, loading} = await registerUser(userData);
-    console.log(user)
-    if (user) {
-      setRegistrationSuccess(true);
-      
+    const response = await registerUser(userData);
+    console.log(response)
+    console.log(response.error)
+    if (response.data.status === "SUCCESS") {
+      dispatch(setUserDetails({ name: userData.name, email: userData.email, phoneNumber: userData.phoneNumber }));
     }
 
-    if (error) {
+    if (response.error.code === 400) {
       setShowErrorModal(true);
     }
   };
@@ -113,13 +122,15 @@ const Register = () => {
                 <p>{errors.password}</p>
               </Form.Group>
 
-              <Button
+              {!isLoading && <Button
                 variant="primary"
                 type="submit"
                 style={{ marginTop: "10px" }}
               >
                 Register
               </Button>
+              }
+              {isLoading && <Spinner animation="border" variant="primary" />}
             </Form>
           )}
         </Formik>
@@ -141,17 +152,19 @@ const Register = () => {
       </Modal>
 
       {/* Error Modal */}
-      {/* <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Registration Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{error}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseErrorModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
+      {error && (
+        <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Registration Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{error.message}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseErrorModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </Card>
   );
 };

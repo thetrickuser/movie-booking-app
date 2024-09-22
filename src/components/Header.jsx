@@ -14,7 +14,7 @@ import { FaSearch, FaUserCircle } from "react-icons/fa";
 import "./Header.css"; // Import the CSS file for custom styles
 import { Link } from "react-router-dom";
 import { auth } from "../../firebaseConfig";
-import { useLogoutUserMutation } from "../store/auth";
+import { useLogoutUserMutation } from "../api/authApi";
 
 const Header = () => {
   const [logoutUser] = useLogoutUserMutation();

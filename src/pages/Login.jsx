@@ -2,8 +2,10 @@ import { Form, Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { object, string } from "yup";
-import { useLoginUserMutation } from "../store/auth";
+import { useLoginUserMutation } from "../api/authApi";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../store/userDetailsSlice";
 
 const loginSchema = object({
   email: string().required(),
@@ -11,11 +13,15 @@ const loginSchema = object({
 });
 
 const Login = () => {
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [loginUser, { isLoading, error, isError, isSuccess }] = useLoginUserMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogin = async (email, password) => {
-    const user = await loginUser({email, password});
-    console.log(user);
+    const response = await loginUser({email, password});
+    if (response.data.status === "SUCCESS") {
+      console.log(response.data);
+      dispatch(setUserDetails(response.data.userData));
+    }
     navigate("/");
   }
 
